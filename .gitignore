@@ -117,3 +117,6 @@ dmypy.json
 firebase_creds.json
 
 .DS_Store
+
+# Ignore VSCode settings
+.vscode
