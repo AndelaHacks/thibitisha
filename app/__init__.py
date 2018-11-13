@@ -87,7 +87,12 @@ def create_post():
 @app.route('/posts', methods=['GET'])
 def fetch_posts():
   result = firebase.get('/posts', None)
-  return json.dumps(result)
+  response = jsonify({
+    'status': 'ok',
+    'posts': result,
+  })
+  response.status_code = 200
+  return response
 
 @app.route('/sign_up', methods=['POST'])
 def sign_up():
