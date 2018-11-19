@@ -79,6 +79,7 @@ def create_post():
   timestamp = str(datetime.datetime.now())
   new_post.update({'time': timestamp})
 
+  # TODO: Check if article exists before saving it
   # save_in_firebase
   firebase.post('/posts', new_post, params={'print': 'pretty'})
 
@@ -86,10 +87,24 @@ def create_post():
 
 @app.route('/posts', methods=['GET'])
 def fetch_posts():
-  result = firebase.get('/posts', None)
+  results = firebase.get('/posts', None)
+  posts = []
+  if results is not None:
+    for i in results.keys():
+      post = results[i]
+      # Order post details by keys
+      post = {
+        'uuid':  i,
+        'title': post.get('title',''),
+        'description': post.get('description',''),
+        'image': post.get('image',''),
+        'time': post.get('time',''),
+        'url': post.get('url',''),
+      }
+      posts.append(post)
   response = jsonify({
-    'status': 'ok',
-    'posts': result,
+    'status': 'success',
+    'posts': posts,
   })
   response.status_code = 200
   return response
